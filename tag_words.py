@@ -5,12 +5,22 @@ from nltk.corpus import conll2000
 
 #general N-gram tagger
 #works for every N
-def ngram_tagger(n,phrase):
+def ngram_tagger(n,backoff=None):
 	train_data = conll2000.tagged_sents('train.txt')
-	Ngram_Tagger = NgramTagger(n,train_data)
+	Ngram_Tagger = NgramTagger(n,train_data,backoff=backoff)
+	return(Ngram_Tagger)
+
+#Backoff Tagging
+def backoff_tagger():
+
+	t0 = nltk.DefaultTagger('NN')
+	t1 = ngram_tagger(1,backoff=t0)
+	t2 = ngram_tagger(2,backoff=t1)
+	t3 = ngram_tagger(3,backoff=t2)
+
 	test_data = conll2000.tagged_sents('test.txt')
-	print(Ngram_Tagger.evaluate(test_data))
-	print(Ngram_Tagger.tag(phrase))
+	print(t3.evaluate(test_data))
+
 
 
 ##Greedy Average Perceptron tagger
@@ -18,23 +28,31 @@ def ngram_tagger(n,phrase):
 def perceptron_tagger(phrase):
 	text = nltk.word_tokenize(phrase)
 	tags = nltk.pos_tag(text)
-	return tags
+	return(tags)
 
 
-#Part-of-Speech Tagging
-#split phrase into parts of speech 
-def tag_words(phrase):
+#Compare different taggers to each other
+def tag_words():
 
-	#call different taggers here and compare
+	test_data = conll2000.tagged_sents('test.txt')
+	unigram = ngram_tagger(1)
+	bigram = ngram_tagger(2)
+	trigram = ngram_tagger(3)
+	fourgram = ngram_tagger(4)
+	print(unigram.evaluate(test_data))
+	print(bigram.evaluate(test_data))
+	print(trigram.evaluate(test_data))
+	print(fourgram.evaluate(test_data))
 
-
-	return None
 
 
 
 if __name__ == '__main__':
 
-	phrase = "I like dogs"
-	phrase = nltk.word_tokenize(phrase)
-	ngram_tagger(1,phrase)
+	"""
+	phrase = "I like dogs because of their cuteness"
+	print(perceptron_tagger(phrase))
+	"""
+	
+	backoff_tagger()
 
