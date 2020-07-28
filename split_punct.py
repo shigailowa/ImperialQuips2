@@ -7,20 +7,16 @@ def split_punct(msg):
 
    	#use nltk sentence tokenizer first
 	sents = nltk.sent_tokenize(msg)
-	#return sents 
-
 	
-	#then split additionally on commas and semicolons
-	seps = [',',';']
-	default_sep = seps[0]
-
+	#then split additionally on commas
 	final_sents = []
 
 	for sent in sents:
-		for sep in seps[1:]:
-			sent = sent.replace(sep,default_sep)
 
-		sent = sent.split(default_sep)
+		sent = sent.split(",")
+
+		for index, item in enumerate(sent[:-1]):
+			sent[index] = item + ","
 
 		for item in sent:
 			final_sents.append(item)
@@ -31,4 +27,4 @@ def split_punct(msg):
 if __name__ == '__main__':
 
 	msg = "I like watching netflix, playing football and eating pizza. How about you?"
-	split_punct(msg)
+	print(split_punct(msg))

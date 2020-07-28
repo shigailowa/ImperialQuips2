@@ -9,6 +9,9 @@ def wordnet_sim(word,pos_tag):
 	sim_words = []
 
 	for syn in wn.synsets(word):
+		print(syn)
+		print(syn.name())
+		print(syn.pos())
 		print(syn.similar_tos())
 	
 
@@ -32,4 +35,4 @@ if __name__ == '__main__':
 
 	word = 'good'
 	#suggest_replacement(word)
-	wordnet_sim(word)
+	wordnet_sim(word,"JJ")
