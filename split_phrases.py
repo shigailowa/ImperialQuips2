@@ -64,13 +64,13 @@ def bigram_chunk():
 	return(bigram_chunker)
 
 
-#Compare different chunkers
-def split_phrases(regexp_chunker, unigram_chunker, bigram_chunker):
+#Call best performing chunker
+def split_phrases(tagged_phrase):
 
-	test_sents = conll2000.chunked_sents('test.txt')
-	print(regexp_chunker.evaluate(test_sents))
-	print(unigram_chunker.evaluate(test_sents))
-	print(bigram_chunker.evaluate(test_sents))
+	bigram_chunker = bigram_chunk()
+	chunks = bigram_chunker.parse(tagged_phrase)
+	return(chunks)
+
 
 	"""
 	text = nltk.word_tokenize('My yellow dog loves eating breakfast and I like to watch netflix')
@@ -81,10 +81,11 @@ def split_phrases(regexp_chunker, unigram_chunker, bigram_chunker):
 
 if __name__ == '__main__':
 
-	
+	"""
 	regexp_chunker = regexp_chunk()
 	unigram_chunker = unigram_chunk()
 	bigram_chunker = bigram_chunk()
+	"""
 
 	"""
 	phrase = "My yellow dog has been asking to eat the whole day because of hunger"
@@ -95,6 +96,19 @@ if __name__ == '__main__':
 	print(unigram_chunker.parse(tags))
 	print(bigram_chunker.parse(tags))
 	"""
-
-	split_phrases(regexp_chunker,unigram_chunker,bigram_chunker)
-	
+	"""
+	test_sents = conll2000.chunked_sents('test.txt')
+	print(regexp_chunker.evaluate(test_sents))
+	print(unigram_chunker.evaluate(test_sents))
+	print(bigram_chunker.evaluate(test_sents))
+	"""
+	phrase = "play football and watch netflix"
+	text = nltk.word_tokenize(phrase)
+	tags = nltk.pos_tag(text)
+	chunks = split_phrases(tags)
+	for chunk in chunks:
+			if type(chunk) is nltk.Tree:
+				for word,tag in chunk:
+					print(word)
+			else:
+				print(chunk[0])

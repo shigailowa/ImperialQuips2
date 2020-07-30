@@ -28,11 +28,11 @@ def vector_sim(word):
 #Word Similarity
 #suggest words to replace given word with
 def suggest_replacement(word):
-	return None
+	return(vector_sim(word))
 
 
 if __name__ == '__main__':
 
-	word = 'good'
-	#suggest_replacement(word)
-	wordnet_sim(word,"JJ")
+	word = 'netflix'
+	print(suggest_replacement(word))
+	#wordnet_sim(word,"JJ")

@@ -34,14 +34,15 @@ def perceptron_tagger(train_data):
 	tagger = PerceptronTagger(load = False)
 	tagger.train(train_data)
 
-	#text = nltk.word_tokenize(phrase)
-	#tags = nltk.pos_tag(text)
 	return tagger
 
 
 #Use best performing tagger as final tagger
-def tag_words():
-	return None
+def tag_words(phrase):
+	
+	text = nltk.word_tokenize(phrase)
+	tags = nltk.pos_tag(text)
+	return(tags)
 
 
 if __name__ == '__main__':

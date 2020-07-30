@@ -1,66 +1,9 @@
 
-from message import Message
+import split_punct
+import tag_words
+import split_phrases
+import suggest_replacement
 import nltk
-import gensim.downloader as api 
-from nltk.corpus import wordnet as wn
-
-
-#Sentence Segmentation
-#split Message into subphrases 
-#according to puctuation
-def split_punct(msg):
-
-   	#use nltk sentence tokenizer first
-	sents = nltk.sent_tokenize(msg)
-	#return sents 
-
-	
-	#then split additionally on commas and semicolons
-	seps = [',',';']
-	default_sep = seps[0]
-
-	final_sents = []
-
-	for sent in sents:
-		for sep in seps[1:]:
-			sent = sent.replace(sep,default_sep)
-
-		sent = sent.split(default_sep)
-
-		for item in sent:
-			final_sents.append(item)
-
-	return final_sents 
-	
-
-
-#Part-of-Speech Tagging
-#split phrase into parts of speech 
-def tag_words(phrase):
-	text = nltk.word_tokenize(phrase)
-	tags = nltk.pos_tag(text)
-	#trigram = nltk.TrigramTagger(training data)
-	#tags = trigram.tag(phrase)
-
-	return tags
-
-#Word Similarity
-#suggest words to replace given word with
-def suggest_replacement(word):
-
-	#GloVe Vectors, cosine similarity
-	word_vectors = api.load("glove-wiki-gigaword-50")
-	sim_words = word_vectors.most_similar(word,topn=3)
-
-	#WordNet
-	sim_words_wn = []
-
-	for syn in wn.synsets(word):
-		for l in syn.lemmas():
-			sim_words_wn.append(l)
-
-
-	return sim_words
 
 
 def personalise_message():
@@ -72,11 +15,11 @@ def personalise_message():
 	#gets updated after each modification
 	final_output = ""
 
-	"""
-	sents = split_punct(msg)
+	sents = split_punct.split_punct(msg)
 
 	for index, item in enumerate(sents):
 		print(str(index+1) + ". " + item)
+
 
 	modification = input("Type 'd' to delete a sentence, 'm' to modify a sentence and 'n' to do nothing: ")
 
@@ -84,11 +27,44 @@ def personalise_message():
 		sen_del = input("Choose sentence to delete: ")
 		final_output = sents.pop(int[sen_del]-1)
 	elif modification == 'm':
+		#POS and phrase splitting
 		sen_mod = input("Choose sentence to modify: ")
-		#TODO: phrase segmentation
-	"""
+		subsen = sents[int(sen_mod)-1]
+		tags = tag_words.tag_words(subsen)
+		chunks = split_phrases.split_phrases(tags)
 
-	print(split_phrases(msg))
+		chunks_output = []
+		for index, chunk in enumerate(chunks):
+			temp = ""
+			if type(chunk) is nltk.Tree:
+				for word,tag in chunk:
+					temp = temp + word + " "
+				chunks_output.append(temp)
+			else:
+				temp = chunk[0]
+				chunks_output.append(temp)
+
+			print(str(index+1) + "." + temp)
+
+		modification = input("Type 'd' to delete a phrase, 'm' to modify a phrase and 'n' to do nothing: ")
+
+		if modification == 'm':
+			sen_mod = input("Choose phrase to modify: ")
+			print(chunks_output)
+			sub_phrase = chunks_output[int(sen_mod)-1]
+
+			words = sub_phrase.split()	
+			for index, word in enumerate(words):
+				print(str(index+1) + "." + word)
+
+			modification = input("Choose word to replace: ")
+			word = words[int(modification)-1]
+			sim_words = suggest_replacement.suggest_replacement(word)
+			for index, word in enumerate(sim_words):
+				print(str(index+1) + "." + word[0])
+
+
+	#print(split_phrases(msg))
 
 
 
