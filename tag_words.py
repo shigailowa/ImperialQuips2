@@ -132,7 +132,7 @@ if __name__ == '__main__':
 	plt.plot(x,nps_acc,'-ok',color = 'r',label="NPS Chat")
 	plt.xlabel("N")
 	plt.ylabel("Accuracy")
-	x_ticks = np.arange(0,5,1)
+	x_ticks = np.arange(1,6,1)
 	plt.xticks(x_ticks)
 	plt.legend()
 	#plt.show()
