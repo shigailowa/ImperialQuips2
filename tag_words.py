@@ -70,7 +70,7 @@ if __name__ == '__main__':
 	test_data_3 = nps_chat.tagged_posts()[size:]
 
 
-	
+	"""	
 	#train different Taggers
 	#simple Ngram
 	unigram_1 = ngram_tagger(1,train_data = train_data_1)
@@ -90,6 +90,25 @@ if __name__ == '__main__':
 	trigram_3 = ngram_tagger(3,train_data = train_data_3)
 	fourgram_3 = ngram_tagger(4,train_data = train_data_3)
 	fivegram_3 = ngram_tagger(5,train_data = train_data_3)
+	"""
+
+	backoff1_1 = backoff_tagger(1,train_data = train_data_1)
+	backoff2_1 = backoff_tagger(2,train_data = train_data_1)
+	backoff3_1 = backoff_tagger(3,train_data = train_data_1)
+	backoff4_1 = backoff_tagger(4,train_data = train_data_1)
+	backoff5_1 = backoff_tagger(5,train_data = train_data_1)
+
+	backoff1_2 = backoff_tagger(1,train_data = train_data_2)
+	backoff2_2 = backoff_tagger(2,train_data = train_data_2)
+	backoff3_2 = backoff_tagger(3,train_data = train_data_2)
+	backoff4_2 = backoff_tagger(4,train_data = train_data_2)
+	backoff5_2 = backoff_tagger(5,train_data = train_data_2)
+
+	backoff1_3 = backoff_tagger(1,train_data = train_data_3)
+	backoff2_3 = backoff_tagger(2,train_data = train_data_3)
+	backoff3_3 = backoff_tagger(3,train_data = train_data_3)
+	backoff4_3 = backoff_tagger(4,train_data = train_data_3)
+	backoff5_3 = backoff_tagger(5,train_data = train_data_3)
 
 	"""
 	#Backoff Taggers
@@ -106,25 +125,25 @@ if __name__ == '__main__':
 	
 	#Evaluate Taggers
 	conll_acc = []
-	conll_acc.append(unigram_1.evaluate(test_data_1))
-	conll_acc.append(bigram_1.evaluate(test_data_1))
-	conll_acc.append(trigram_1.evaluate(test_data_1))
-	conll_acc.append(fourgram_1.evaluate(test_data_1))
-	conll_acc.append(fivegram_1.evaluate(test_data_1))
+	conll_acc.append(backoff1_1[-1].evaluate(test_data_1))
+	conll_acc.append(backoff2_1[-1].evaluate(test_data_1))
+	conll_acc.append(backoff3_1[-1].evaluate(test_data_1))
+	conll_acc.append(backoff4_1[-1].evaluate(test_data_1))
+	conll_acc.append(backoff5_1[-1].evaluate(test_data_1))
 
 	brown_acc = []
-	brown_acc.append(unigram_2.evaluate(test_data_2))
-	brown_acc.append(bigram_2.evaluate(test_data_2))
-	brown_acc.append(trigram_2.evaluate(test_data_2))
-	brown_acc.append(fourgram_2.evaluate(test_data_2))
-	brown_acc.append(fivegram_2.evaluate(test_data_2))
+	brown_acc.append(backoff1_2[-1].evaluate(test_data_2))
+	brown_acc.append(backoff2_2[-1].evaluate(test_data_2))
+	brown_acc.append(backoff3_2[-1].evaluate(test_data_2))
+	brown_acc.append(backoff4_2[-1].evaluate(test_data_2))
+	brown_acc.append(backoff5_2[-1].evaluate(test_data_2))
 
 	nps_acc = []
-	nps_acc.append(unigram_3.evaluate(test_data_3))
-	nps_acc.append(bigram_3.evaluate(test_data_3))
-	nps_acc.append(trigram_3.evaluate(test_data_3))
-	nps_acc.append(fourgram_3.evaluate(test_data_3))
-	nps_acc.append(fivegram_3.evaluate(test_data_3))
+	nps_acc.append(backoff1_3[-1].evaluate(test_data_3))
+	nps_acc.append(backoff2_3[-1].evaluate(test_data_3))
+	nps_acc.append(backoff3_3[-1].evaluate(test_data_3))
+	nps_acc.append(backoff4_3[-1].evaluate(test_data_3))
+	nps_acc.append(backoff5_3[-1].evaluate(test_data_3))
 
 	x = [1,2,3,4,5]
 	plt.plot(x,conll_acc,'-ok',color = 'b',label="WSJ")
@@ -136,7 +155,7 @@ if __name__ == '__main__':
 	plt.xticks(x_ticks)
 	plt.legend()
 	#plt.show()
-	plt.savefig('ngram_acc.pdf')
+	plt.savefig('backoff_acc.pdf')
 
 
 
