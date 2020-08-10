@@ -58,9 +58,9 @@ class NgramChunker(nltk.ChunkParserI):
 #Rule-based chunking
 def regexp_chunk():
 	#define rules here
-	grammar = r"""NP: {<DT|PP|PRP\$>?<JJ>*<N.*>+}
+	grammar = r"""NP: {<DT|PDT|CD|PRP\$>?<JJ>*<N.*>+}
 				  VP: {<V.*>+<TO>?<V.*>*}
-				  PP: {<IN>+|<TO>+}
+				  PP: {<IN>+}
 			   """
 	cp = nltk.RegexpParser(grammar)
 	return(cp)
@@ -102,17 +102,16 @@ def split_phrases(tagged_phrase):
 
 if __name__ == '__main__':
 
-	"""
+	
 	regexp_chunker = regexp_chunk()
 	unigram_chunker = ngram_chunk(1)
 	bigram_chunker = ngram_chunk(2)
-	"""
+	
 
-	"""
+
 	trigram_chunker = ngram_chunk(3)
 	fourgram_chunker = ngram_chunk(4)
 	fivegram_chunker = ngram_chunk(5)
-	"""
 
 	"""
 	phrase = "My yellow dog has been asking to eat the whole day because of hunger"
@@ -124,7 +123,7 @@ if __name__ == '__main__':
 	print(bigram_chunker.parse(tags))
 	"""
 
-	"""
+
 	test_sents = conll2000.chunked_sents('test.txt')
 	print(regexp_chunker.evaluate(test_sents))
 	print(unigram_chunker.evaluate(test_sents))
@@ -139,6 +138,7 @@ if __name__ == '__main__':
 	tags = nltk.pos_tag(text)
 	chunks = split_phrases(tags)
 	print(chunks)
+	"""
 
 	"""
 	for chunk in chunks:
