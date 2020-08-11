@@ -10,6 +10,7 @@ from nltk.corpus import nps_chat
 from nltk.corpus import cess_esp
 from nltk.corpus import indian
 from nltk.corpus import ConllCorpusReader
+from nltk.corpus import BracketParseCorpusReader
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -54,6 +55,14 @@ def tag_words(phrase):
 def read_german():
 	corp = ConllCorpusReader('.','tiger_release_aug07.corrected.16012013.conll09',
 							['ignore','words','ignore','ignore','pos'],encoding='utf-8')
+
+
+	return(corp)
+
+
+def read_russian(data):
+	corp = ConllCorpusReader('.', data, 
+							['ignore','words','ignore','pos','ignore','ignore','ignore','ignore','ignore','ignore'], encoding='utf-8')
 	return(corp)
 
 
@@ -61,10 +70,11 @@ if __name__ == '__main__':
 
 	#print(tag_words("play football and watch netflix"))
 
-	germo = read_german()
-	size = int(len(germo.tagged_sents())*0.8)
-	train_data_ge = germo.tagged_sents()[:size]
-	test_data_ge = germo.tagged_sents()[size:]
+	train_data_rus = read_russian('russ_train_new.conll').tagged_sents()
+	test_data_rus = read_russian('russ_test_new.conll').tagged_sents()
+	#size = int(len(germo.tagged_sents())*0.8)
+	#train_data_ge = germo.tagged_sents()[:size]
+	#test_data_ge = germo.tagged_sents()[size:]
 
 	#different Datasets
 	
@@ -114,11 +124,11 @@ if __name__ == '__main__':
 	#simple Ngram
 	
 	"""
-	unigram_1 = ngram_tagger(1,train_data = train_data_ge)
-	bigram_1 = ngram_tagger(2,train_data = train_data_ge)
-	trigram_1 = ngram_tagger(3,train_data = train_data_ge)
-	fourgram_1 = ngram_tagger(4,train_data = train_data_ge)
-	fivegram_1 = ngram_tagger(5,train_data = train_data_ge)
+	unigram_1 = ngram_tagger(1,train_data = train_data_rus)
+	bigram_1 = ngram_tagger(2,train_data = train_data_rus)
+	trigram_1 = ngram_tagger(3,train_data = train_data_rus)
+	fourgram_1 = ngram_tagger(4,train_data = train_data_rus)
+	fivegram_1 = ngram_tagger(5,train_data = train_data_rus)
 	"""
 
 	"""
@@ -137,12 +147,13 @@ if __name__ == '__main__':
 	"""
 
 	"""
-	backoff1_1 = backoff_tagger(1,train_data = train_data_ge)
-	backoff2_1 = backoff_tagger(2,train_data = train_data_ge)
-	backoff3_1 = backoff_tagger(3,train_data = train_data_ge)
-	backoff4_1 = backoff_tagger(4,train_data = train_data_ge)
-	backoff5_1 = backoff_tagger(5,train_data = train_data_ge)
+	backoff1_1 = backoff_tagger(1,train_data = train_data_rus)
+	backoff2_1 = backoff_tagger(2,train_data = train_data_rus)
+	backoff3_1 = backoff_tagger(3,train_data = train_data_rus)
+	backoff4_1 = backoff_tagger(4,train_data = train_data_rus)
+	backoff5_1 = backoff_tagger(5,train_data = train_data_rus)
 	"""
+
 	"""
 
 	backoff1_2 = backoff_tagger(1,train_data = train_data_in)
@@ -170,25 +181,25 @@ if __name__ == '__main__':
 	"""
 	
 	#Perceptron Tagger
-	perceptron = perceptron_tagger(train_data_ge)
-	print(perceptron.evaluate(test_data_ge))
+	perceptron = perceptron_tagger(train_data_rus)
+	print(perceptron.evaluate(test_data_rus))
 
 	
 	#Evaluate Taggers
 	"""
 	conll_acc = []
-	conll_acc.append(backoff1_1[-1].evaluate(test_data_ge))
-	conll_acc.append(backoff2_1[-1].evaluate(test_data_ge))
-	conll_acc.append(backoff3_1[-1].evaluate(test_data_ge))
-	conll_acc.append(backoff4_1[-1].evaluate(test_data_ge))
-	conll_acc.append(backoff5_1[-1].evaluate(test_data_ge))
+	conll_acc.append(backoff1_1[-1].evaluate(test_data_rus))
+	conll_acc.append(backoff2_1[-1].evaluate(test_data_rus))
+	conll_acc.append(backoff3_1[-1].evaluate(test_data_rus))
+	conll_acc.append(backoff4_1[-1].evaluate(test_data_rus))
+	conll_acc.append(backoff5_1[-1].evaluate(test_data_rus))
 
 	brown_acc = []
-	brown_acc.append(unigram_1.evaluate(test_data_ge))
-	brown_acc.append(bigram_1.evaluate(test_data_ge))
-	brown_acc.append(trigram_1.evaluate(test_data_ge))
-	brown_acc.append(fourgram_1.evaluate(test_data_ge))
-	brown_acc.append(fivegram_1.evaluate(test_data_ge))
+	brown_acc.append(unigram_1.evaluate(test_data_rus))
+	brown_acc.append(bigram_1.evaluate(test_data_rus))
+	brown_acc.append(trigram_1.evaluate(test_data_rus))
+	brown_acc.append(fourgram_1.evaluate(test_data_rus))
+	brown_acc.append(fivegram_1.evaluate(test_data_rus))
 	"""
 
 	"""	
