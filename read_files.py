@@ -59,6 +59,28 @@ def read_rw_file():
 	return(rw_words)
 
 
+def read_simlex_file():
+	
+	input = open('SimLex-999.txt','r')
+
+	sl_words = {}
+	sl_words['n'] = {}
+	sl_words['v'] = {}
+	sl_words['a'] = {}
+
+	itersim = iter(input)
+	next(itersim)
+ 
+	for line in itersim:
+		entries = line.split()
+		if float(entries[3]) >= 5:
+			sl_words[entries[2].lower()][entries[0]] = entries[1] 
+
+	input.close()
+	return(sl_words)
+
+
 if __name__ == '__main__':
     
-    print(read_scws_file())
+    print(read_simlex_file())
+

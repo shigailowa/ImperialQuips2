@@ -2,6 +2,8 @@ import nltk
 import gensim.downloader as api 
 from nltk.corpus import wordnet as wn 
 import read_files
+import re
+import random
 
 
 #Get similar words from WordNet 
@@ -41,19 +43,47 @@ def vector_sim(word):
 
 #Word Similarity
 #suggest words to replace given word with
-def suggest_replacement(word):
-	return(vector_sim(word))
+def suggest_replacement(word,pos_tag):
+	
+	sim_words = []
 
+	wv_tag = ""
+
+	if re.match(r"N.*",pos_tag):
+		wv_tag = "n"
+	elif re.match(r"V.*",pos_tag):
+		wv_tag = "v"
+	elif pos_tag == "JJ" or pos_tag == "RB":
+		wv_tag = "a"
+
+	#print(wv_tag)	
+
+	for i in range(1,10):
+		try:
+			lemmas = wn.synset(word+'.'+wv_tag+'.'+'0'+str(i)).lemma_names()
+		except:
+			pass
+		while len(sim_words) < 3 and lemmas:
+			r = random.randint(0,len(lemmas)-1)
+			if (lemmas[r] != word):
+				sim_words.append(lemmas[r])
+			lemmas.pop(r)
+
+
+	return(sim_words)
 
 def eval_methods():
 
-	#rg = read_files.read_rg_file()
-	#ws = read_files.read_wordsim_file()
-	sc = read_files.read_scws_file()
+	
+	rg = read_files.read_rg_file()
+	ws = read_files.read_wordsim_file()
+	#sc = read_files.read_scws_file()
+	#sl = read_files.read_simlex_file()
 
+	"""
 	matches = 0
 	####Evaluation of wordnet
-	for pos,entry in sc.items():
+	for pos,entry in sl.items():
 		for key, value in entry.items():
 			sim_words = wordnet_sim(key,pos)
 			for word in sim_words:
@@ -61,16 +91,17 @@ def eval_methods():
 					matches = matches+1
 
 	return(matches)
-
 	"""
+
+	
 	###Evaluation of embeddings
-	word_vectors = api.load("glove-wiki-gigaword-50")
-	#word_vectors = api.load("word2vec-google-news-300")
+	#word_vectors = api.load("glove-wiki-gigaword-50")
+	word_vectors = api.load("word2vec-google-news-300")
 
 	matches1 = 0
 	matches2 = 0
-
-	for key, value in ws.items():
+	#for pos, entry in ws.items():
+	for key, value in rg.items():
 		try:
 			sim_words3 = word_vectors.most_similar(key, topn=3)
 			sim_words10 = word_vectors.most_similar(key, topn=10)
@@ -80,13 +111,14 @@ def eval_methods():
 
 			for word in sim_words10:
 				if word[0] == value:
-					matches1 = matches2 + 1		
+					matches2 = matches2 + 1		
 		except:
 			pass
 
+	
 	matches3 = 0
 	matches4 = 0				
-	for key, value in sc.items():
+	for key, value in ws.items():
 		try:
 			sim_words3 = word_vectors.most_similar(key, topn=3)
 			sim_words10 = word_vectors.most_similar(key, topn=10)
@@ -99,17 +131,18 @@ def eval_methods():
 					matches4 = matches4 + 1
 		except:
 			pass
+	
 
 	matches = [matches1,matches2,matches3,matches4]
 	return(matches)
 
-	"""
+	
 
 
 if __name__ == '__main__':
 
-	#word = 'gem'
-	#print(suggest_replacement(word))
+	word = 'talk'
+	print(suggest_replacement(word,'VBZ'))
 	#print(wordnet_sim(word,"n"))
 
-	print(eval_methods())
+	#print(eval_methods())
