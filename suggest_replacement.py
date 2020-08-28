@@ -4,6 +4,7 @@ from nltk.corpus import wordnet as wn
 import read_files
 import re
 import random
+from wiki_ru_wordnet import WikiWordnet
 
 
 #Get similar words from WordNet 
@@ -138,13 +139,68 @@ def eval_methods():
 
 
 def eval_rus():
-	return None 
+
+	simlex = read_files.read_simlex_rus_file()
+	wordsim = read_files.read_wordsim_rus_file()
+
+	wn = WikiWordnet()
+
+	"""
+	#evaluation of wordnet
+	matches = 0
+	for key,value in wordsim.items():
+		synset = wn.get_synsets(key)
+		for syn in synset:
+			for w in syn.get_words():
+				word = w.lemma()
+				if value == word:
+					matches = matches + 1
+	"""
+
+	#evaluation of word vectors 
+	word_vectors = api.load('word2vec-ruscorpora-300')
+
+	matches1 = 0
+	matches2 = 0
+	matches3 = 0
+	matches4 = 0
+
+	for key, value in simlex.items():
+		try: 
+			sim_words3 = word_vectors.most_similar(key, topn=3)
+			sim_words10 = word_vectors.most_similar(key, topn=10)
+			for word in sim_words3:
+				if word[0] == value:
+					matches1 = matches1 + 1
+
+			for word in sim_words10:
+				if word[0] == value:
+					matches2 = matches2 + 1		
+		except:
+			pass
+
+	for key, value in wordsim.items():
+		try: 
+			sim_words3 = word_vectors.most_similar(key, topn=3)
+			sim_words10 = word_vectors.most_similar(key, topn=10)
+			for word in sim_words3:
+				if word[0] == value:
+					matches3 = matches3 + 1
+
+			for word in sim_words10:
+				if word[0] == value:
+					matches4 = matches4 + 1		
+		except:
+			pass
+
+
+	return [matches1, matches2, matches3, matches4]
 
 
 if __name__ == '__main__':
 
-	word = 'talk'
-	print(suggest_replacement(word,'VBZ'))
+	#word = 'talk'
+	#print(suggest_replacement(word,'VBZ'))
 	#print(wordnet_sim(word,"n"))
-
+	print(eval_rus())
 	#print(eval_methods())
