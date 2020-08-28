@@ -117,5 +117,5 @@ def read_wordsim_rus_file():
 
 if __name__ == '__main__':
     
-    print(len(read_simlex_rus_file()))
+    print((read_simlex_rus_file()))
 
