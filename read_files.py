@@ -80,7 +80,42 @@ def read_simlex_file():
 	return(sl_words)
 
 
+def read_simlex_rus_file():
+
+	input = open('MSimLex999_Russian.txt')
+
+	itersim = iter(input)
+	next(itersim)
+
+	sim_words = {} 
+
+	for line in itersim:
+		entries = line.split(',')
+		if float(entries[15]) >= 5:
+			sim_words[entries[0]] = entries[1]
+
+	input.close()
+	return(sim_words)
+
+def read_wordsim_rus_file():
+
+	input = open('WS353-russian-sim.txt')
+
+	itersim = iter(input)
+	next(itersim)
+
+	sim_words = {} 
+
+	for line in itersim:
+		entries = line.split(',')
+		if float(entries[2]) >= 5:
+			sim_words[entries[0]] = entries[1]
+
+	input.close()
+	return(sim_words)
+
+
 if __name__ == '__main__':
     
-    print(read_simlex_file())
+    print(read_wordsim_rus_file())
 

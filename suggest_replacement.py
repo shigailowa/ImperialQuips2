@@ -136,7 +136,9 @@ def eval_methods():
 	matches = [matches1,matches2,matches3,matches4]
 	return(matches)
 
-	
+
+def eval_rus():
+	return None 
 
 
 if __name__ == '__main__':
