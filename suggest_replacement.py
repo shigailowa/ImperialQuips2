@@ -96,8 +96,8 @@ def eval_methods():
 
 	
 	###Evaluation of embeddings
-	#word_vectors = api.load("glove-wiki-gigaword-50")
-	word_vectors = api.load("word2vec-google-news-300")
+	word_vectors = api.load("glove-wiki-gigaword-50")
+	#word_vectors = api.load("word2vec-google-news-300")
 
 	matches1 = 0
 	matches2 = 0
@@ -223,5 +223,5 @@ if __name__ == '__main__':
 	#word = 'talk'
 	#print(suggest_replacement(word,'VBZ'))
 	#print(wordnet_sim(word,"n"))
-	print(eval_rus())
+	print(eval_methods())
 	#print(eval_methods())
