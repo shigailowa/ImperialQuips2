@@ -6,10 +6,7 @@ import suggest_replacement
 import nltk
 
 
-def personalise_message():
-
-	
-	msg = input("Input your message: ")
+def personalise_message(msg):
 
 	sents = split_punct.split_punct(msg)
 
@@ -139,4 +136,5 @@ def personalise_message():
 
 if __name__ == '__main__':
 
-	personalise_message()
+	msg = "i don ' t really have a favorite movie . i ' m more of an action movie person . what about you ?"
+	personalise_message(msg)
