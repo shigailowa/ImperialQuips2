@@ -11,27 +11,35 @@ def personalise_message():
 	
 	msg = input("Input your message: ")
 
-
-	#gets updated after each modification
-	final_output = ""
-
 	sents = split_punct.split_punct(msg)
-	modification = ""
-	chunks_output = []
-	words = []
 
-	while True:
+	loop = True
+	##Delete sentence  
+	while loop:
 
 		for index, item in enumerate(sents):
-			print(str(index+1) + ". " + item)#
+			print(str(index+1) + ". " + item)
 
-		modification = input("Type 'd' to delete a sentence, 'm' to modify a sentence: ")
+		modification = input("Do you wish to delete a sentence? (y/n): ")
 
-		if modification == 'd':
+		if modification == 'y':
 			sen_del = input("Choose sentence to delete: ")
 			sents.pop(int(sen_del)-1) 
-			continue
-		elif modification == 'm':
+			loop = True
+		elif modification == 'n':
+			loop = False
+
+	loop = True
+	##Modify sentence 
+	while loop:
+
+		modification = input("Do you wish to modify a sentence? (y/n): ")
+
+		if modification == 'n':
+			loop = False
+
+		elif modification == 'y':
+
 			#POS and phrase splitting
 			sen_mod = input("Choose sentence to modify: ")
 			subsen = sents[int(sen_mod)-1]
@@ -39,7 +47,8 @@ def personalise_message():
 			chunks = split_phrases.split_phrases(tags)
 			tags = dict(tags)
 
-			
+			chunks_output = []
+
 			for index, chunk in enumerate(chunks):
 				temp = ""
 				if type(chunk) is nltk.Tree:
@@ -50,85 +59,84 @@ def personalise_message():
 					temp = chunk[0]
 					chunks_output.append(temp)
 
-			while True:
+
+			##delete a phrase
+			loop2 = True
+
+			while loop2:
 
 				for index, chunk in enumerate(chunks_output):
-					print(str(index+1) + "." + chunk) 
+					print(str(index+1) + "." + chunk) 	
 
-				modification = input("Type 'd' to delete a phrase, 'm' to modify a phrase: ")
+				modification = input("Do you wish to delete a phrase? (y/n): ")
 
-				if modification == "d":
+				if modification == 'y':
 					sen_del = input("Choose phrase to delete: ")
 					chunks_output.pop(int(sen_del)-1)
-					continue
-				elif modification == 'm':
+					loop2 = True
+				elif modification == 'n':
+					loop2 = False
+
+			##modify a phrase
+
+			loop3 = True
+
+			while loop3:
+
+				modification = input("Do you wish to modify a phrase? (y/n): ")
+
+				if modification == 'n':
+					loop3 = False
+				elif modification == 'y':
+
 					phrase_mod = input("Choose phrase to modify: ")
-					#print(chunks_output)
+
 					sub_phrase = chunks_output[int(phrase_mod)-1]
 
 					words = sub_phrase.split()	
-					for index, word in enumerate(words):
-						print(str(index+1) + "." + word)
 
-					modification = input("Choose word to replace: ")
-					word = words[int(modification)-1]
-					tag = tags[word]
-					sim_words = suggest_replacement.suggest_replacement(word,tag)
-					for index, word in enumerate(sim_words):
-						print(str(index+1) + "." + word)
+					loop4 = True
 
-					replace = input("Choose replacement word or type in own replacement: ")
-					if replace == "1" or replace == "2" or replace == "3":
-						words[int(modification)-1] = sim_words[int(replace)-1]
-					else:
-						words[int(modification)-1] = replace
+					while loop4:
 
-					sub_phrase = " ".join(words)
-					chunks_output[int(phrase_mod)-1] = sub_phrase
-					sents[int(sen_mod)-1] = " ".join(chunks_output)
+						for index, word in enumerate(words):
+							print(str(index+1) + "." + word)
 
-					break
-			break			
+						modification = input("Choose word to replace or type 'none': ")
+
+						if modification == 'none':
+							loop4 = False
+						else:
+							word = words[int(modification)-1]
+							tag = tags[word]
+							sim_words = suggest_replacement.suggest_replacement(word,tag)
+							for index, word in enumerate(sim_words):
+								print(str(index+1) + "." + word)
+
+							replace = input("Choose replacement word or type in own replacement: ")
+							if replace == "1" or replace == "2" or replace == "3":
+								words[int(modification)-1] = sim_words[int(replace)-1]
+							else:
+								words[int(modification)-1] = replace
+
+
+
+						sub_phrase = " ".join(words)
+						chunks_output[int(phrase_mod)-1] = sub_phrase
+						sents[int(sen_mod)-1] = " ".join(chunks_output)	
+
+					for index, chunk in enumerate(chunks_output):
+						print(str(index+1) + "." + chunk) 	
+
+
+		if loop == True:
+			for index, item in enumerate(sents):
+				print(str(index+1) + ". " + item)		
 		
 	print("Modified sentence: " + " ".join(sents))
 
-	#print(split_phrases(msg))
-
-
-
-
-	"""
-	phrase = input("Input your phrase: ")
-	
-	tags = tag_words(phrase)
-
-	for index, item in enumerate(tags):
-		print(str(index+1) + ". " + item[1] + ": " + item[0])
-
-
-	modification = input("Type 'd' to delete, 'r' to replace a word and 'n' to keep phrase: ")
-
-	if modification == 'd':
-		phrase = ""
-	elif modification == 'n':
-		print(phrase)		
-	elif modification == 'r':
-		replace_word = input("Choose word to replace: ")
-		print("replace word: " + tags[int(replace_word)-1][0])
-		#suggest_replacement(tags[replace_word-1][0])
-	"""
-	
-
-	"""
-	word = input("Input word: ")
-	replacement = suggest_replacement(word)
-	print(replacement)
-	"""
 
 
 if __name__ == '__main__':
-
-	#msg = "i like to read, play video games and watch netflix. what about you? do you have any hobbies?"
-	#phrase = "i like to read, play video games and watch netflix"
 
 	personalise_message()

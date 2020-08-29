@@ -63,7 +63,7 @@ def suggest_replacement(word,pos_tag):
 		try:
 			lemmas = wn.synset(word+'.'+wv_tag+'.'+'0'+str(i)).lemma_names()
 		except:
-			pass
+			continue
 		while len(sim_words) < 3 and lemmas:
 			r = random.randint(0,len(lemmas)-1)
 			if (lemmas[r] != word):
